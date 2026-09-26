@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<!--
+  e-ArUco Landing Target — version coplanaire (simulation)
+
+  Outer : DICT_7X7_50 ID=5  — 70cm × 70cm à z=0      (détectable à 5m avec fx=205)
+  Inner : DICT_4X4_50 ID=17 — 10cm × 10cm à z=2mm    (détectable à 0.4m)
+
+  Sizes hardware (class_Camera.py, simulation=None) : outer=0.35m, inner=0.05m
+  Sizes SITL     (class_Camera.py, simulation='SITL'): outer=0.70m, inner=0.10m
+-->
+<sdf version="1.9">
+  <model name="e_aruco">
+    <static>true</static>
+    <link name="link">
+
+      <!-- Outer panel : DICT_7X7_50 ID=5, 70×70cm à z=0 -->
+      <visual name="outer_panel">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.70 0.70 0.001</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/outer_aruco.png</albedo_map>
+              <roughness>0.9</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <!-- Inner panel : DICT_4X4_50 ID=17, 10×10cm à z=2mm (anti z-fighting) -->
+      <visual name="inner_panel">
+        <pose>0 0 0.002 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.10 0.10 0.001</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/inner_aruco.png</albedo_map>
+              <roughness>0.9</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.70 0.70 0.001</size>
+          </box>
+        </geometry>
+      </collision>
+
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,203 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <model name="filet">
+    <static>false</static>
+    <link name="net_link">
+
+      <!-- === CORRECTION INSTABILITÉ : INERTIE OBLIGATOIRE === -->
+      <!-- Un objet avec collision doit avoir une masse, sinon Gazebo panique. -->
+      <inertial>
+        <mass>0.1</mass> <!-- On suppose que le cadre pèse 100g -->
+        <inertia>
+          <!-- Matrice d'inertie approximative pour un cadre carré plat -->
+          <ixx>0.002</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.002</iyy>
+          <iyz>0</iyz>
+          <izz>0.004</izz>
+        </inertia>
+      </inertial>
+      
+      <!-- === LE CADRE (4 Barres pour laisser le centre vide) === -->
+      <!-- On remplace le carré plein par 4 bords de 2cm d'épaisseur -->
+      
+      <!-- Bord Haut (Y+) -->
+      <visual name="frame_top">
+        <pose>0 0.24 0 0 0 0</pose> <!-- Décalé de 24cm -->
+        <geometry>
+          <box>
+            <size>0.50 0.02 0.01</size> <!-- Longueur 50cm, Largeur 2cm -->
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Bord Bas (Y-) -->
+      <visual name="frame_bottom">
+        <pose>0 -0.24 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.50 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Bord Gauche (X-) -->
+      <visual name="frame_left">
+        <pose>-0.24 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.02 0.46 0.01</size> <!-- 46cm pour ne pas chevaucher -->
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Bord Droit (X+) -->
+      <visual name="frame_right">
+        <pose>0.24 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.02 0.46 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Collision Simplifiée (On garde un carré plein pour la physique si on veut que le drone se pose dessus sans passer au travers, sinon mettre 4 collisions aussi) -->
+      <!-- Ici on met 4 collisions pour que le 'cube' puisse tomber dedans si besoin -->
+      <!--<collision name="col_top">
+        <pose>0 0.24 0 0 0 0</pose>
+        <geometry><box><size>0.50 0.02 0.01</size></box></geometry>
+      </collision>
+      <collision name="col_bottom">
+        <pose>0 -0.24 0 0 0 0</pose>
+        <geometry><box><size>0.50 0.02 0.01</size></box></geometry>
+      </collision>
+      <collision name="col_left">
+        <pose>-0.24 0 0 0 0 0</pose>
+        <geometry><box><size>0.02 0.46 0.01</size></box></geometry>
+      </collision>
+      <collision name="col_right">
+        <pose>0.24 0 0 0 0 0</pose>
+        <geometry><box><size>0.02 0.46 0.01</size></box></geometry>
+      </collision>-->
+
+      <!-- LES 5 POINTS (Cylindres plats) -->
+      <!-- Couleur : MAGENTA (1 0 1) pour être vu parfaitement -->
+      <!-- Disposition : Carré de 20cm de côté (donc +/- 10cm du centre) -->
+      
+      <!-- POINT 1 : CENTRE -->
+      <visual name="p1_center">
+        <pose>0 0 -0.20 0 0 0</pose> 
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+          <emissive>1 0 1 1</emissive>
+        </material>
+      </visual>
+
+
+      <!-- LIEN VISUEL FILET (Optionnel : pour voir le "sac") -->
+      <!-- Juste un cylindre translucide pour matérialiser le volume -->
+      <visual name="net_bag">
+        <pose>0 0 -0.10 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.20</radius>
+            <length>0.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 0.3</ambient>
+          <diffuse>0.1 0.1 0.1 0.3</diffuse> <!-- Transparent -->
+        </material>
+      </visual>
+
+      <!-- POINT 2 : AVANT-GAUCHE (Top-Left dans l'image si drone vers le Nord) -->
+      <visual name="p2_front_left">
+        <pose>0.20 0.20 0.006 0 0 0</pose> <!-- X=20cm, Y=20cm -->
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+          <emissive>1 0 1 1</emissive>
+        </material>
+      </visual>
+
+      <!-- POINT 3 : AVANT-DROIT -->
+      <visual name="p3_front_right">
+        <pose>0.20 -0.20 0.006 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+          <emissive>1 0 1 1</emissive>
+        </material>
+      </visual>
+
+      <!-- POINT 4 : ARRIÈRE-DROIT -->
+      <visual name="p4_back_right">
+        <pose>-0.20 -0.20 0.006 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+          <emissive>1 0 1 1</emissive>
+        </material>
+      </visual>
+
+      <!-- POINT 5 : ARRIÈRE-GAUCHE -->
+      <visual name="p5_back_left">
+        <pose>-0.20 0.20 0.006 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+          <emissive>1 0 1 1</emissive>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>
