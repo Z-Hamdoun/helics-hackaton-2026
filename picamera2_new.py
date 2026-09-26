@@ -20,6 +20,20 @@ except ImportError:
 
 _log = logging.getLogger("picamera2_new")
 
+RESOLUTION_CAMERA_GAZEBO: tuple[int, int] = (848, 480)
+
+CAMERA_MATRIX_GAZEBO = np.array(
+    [
+        [205.4696273803711, 0.0, 320.0],
+        [0.0, 205.4696559906006, 240.0],
+        [0.0, 0.0, 1.0],
+    ],
+    dtype=np.float64,
+)
+
+DIST_COEFFS_GAZEBO = np.array([0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float64)
+
+
 class Picamera2:
     """Drop-in replacement for Picamera2 using direct Gazebo transport integration."""
 
@@ -32,10 +46,13 @@ class Picamera2:
 
     def __init__(self, camera_num=0, verbose_console=None, tuning=None, allocator=None):
         _log.info("Initializing Picamera2 with direct Gazebo backend...")
-        
-        self.__resolution: tuple[int, int] = (640, 480)
+
+        self.__resolution: tuple[int, int] = RESOLUTION_CAMERA_GAZEBO
         self.__frame: np.ndarray | None = None
         self.__node = None
+
+        self.camera_matrix: np.ndarray = CAMERA_MATRIX_GAZEBO
+        self.dist_coeffs: np.ndarray = DIST_COEFFS_GAZEBO
 
         if _GZ_AVAILABLE:
             try:
