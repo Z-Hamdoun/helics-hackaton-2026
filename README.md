@@ -9,12 +9,6 @@
 - Installation des dépendences
 
 
-## Code Source
-- Classe Drone à compléter
-- Classe Camera avec détection AruCo
-- Support de la Simu sous Gazebo
-- Fonctions utilitaires si nécessaire
-
 ## Simulation
 
 ```sh
